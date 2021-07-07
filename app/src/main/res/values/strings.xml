@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">RSShool2021-Android-task-Pomodoro</string>
+    <string name="app_name">Pomodoro</string>
+    <string name="start">START</string>
+    <string name="set_number_in_minutes">Set number in minutes</string>
+    <string name="set_time_in_minutes">Set time in minutes</string>
+    <string name="dismiss">dismiss</string>
+    <string name="ok">Ok</string>
 </resources>
