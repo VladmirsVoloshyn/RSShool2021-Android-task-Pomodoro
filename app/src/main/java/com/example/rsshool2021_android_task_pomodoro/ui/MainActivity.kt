@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rsshool2021_android_task_pomodoro.databinding.ActivityMainBinding
+import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener {
 
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener 
     override fun onStartOrStopClick() {
     }
 
-    override fun onDeleteClick() {
-
+    override fun onDeleteClick(position: Int) {
+        viewModel.remove(position)
     }
 }

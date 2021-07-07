@@ -45,7 +45,7 @@ class TimerListAdapter(
                 listener.onStartOrStopClick()
             }
             deleteButton.setOnClickListener {
-                listener.onDeleteClick()
+                listener.onDeleteClick(adapterPosition)
             }
         }
 
@@ -57,7 +57,7 @@ class TimerListAdapter(
 
     interface OnTimerClickListener {
         fun onStartOrStopClick()
-        fun onDeleteClick()
+        fun onDeleteClick(position : Int)
     }
 
     companion object {
