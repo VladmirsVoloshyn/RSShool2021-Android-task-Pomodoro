@@ -5,4 +5,5 @@
     <string name="set_time_in_minutes">Set time in minutes</string>
     <string name="dismiss">dismiss</string>
     <string name="ok">Ok</string>
+    <string name="timer">00:00:00</string>
 </resources>
