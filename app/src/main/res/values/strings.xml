@@ -6,4 +6,6 @@
     <string name="dismiss">dismiss</string>
     <string name="ok">Ok</string>
     <string name="timer">00:00:00</string>
+    <string name="signalized_about_timer_is_running">Signalized about timer is running</string>
+    <string name="add_new_timer">add_new_timer</string>
 </resources>

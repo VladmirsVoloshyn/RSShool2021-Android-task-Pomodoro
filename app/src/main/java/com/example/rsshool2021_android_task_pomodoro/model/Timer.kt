@@ -1,11 +1,13 @@
 package com.example.rsshool2021_android_task_pomodoro.model
 
 import android.os.CountDownTimer
+import android.util.Log
 
 class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
     private var startTimeInMills: Long = (timeInMin * 60000).toLong()
-    private lateinit var countDownTimer: CountDownTimer
+    private var countDownTimer: CountDownTimer? = null
     var isRunning = false
+    var isFinished = false
     private var timeLeftInMills = startTimeInMills
     var updatableStringTimer = updateCountDownText()
 
@@ -18,6 +20,10 @@ class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
 
             override fun onFinish() {
                 isRunning = false
+                isFinished = true
+                Log.d("FINISH", updatableStringTimer)
+                updatableStringTimer = "FINISH"
+                listener?.onUpdate("00:00:00")
             }
         }.start()
         isRunning = true
@@ -30,12 +36,15 @@ class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
         val timeLeftFormatter = String.format("%02d:%02d:%02d", hours, minutes, seconds)
         updatableStringTimer = timeLeftFormatter
         listener?.onUpdate(updatableStringTimer)
+        Log.d("UPDATE", updatableStringTimer)
         return timeLeftFormatter
     }
 
     fun stopTimer() {
-        countDownTimer.cancel()
-        isRunning = false
+        if (countDownTimer!=null) {
+            countDownTimer?.cancel()
+            isRunning = false
+        }
     }
 
     interface OnTimeUpdate {

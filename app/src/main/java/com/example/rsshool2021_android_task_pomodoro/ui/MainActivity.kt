@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener 
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.getData().observe(this, Observer {
+        viewModel.getData().observe(this, {
             val timerListAdapter = TimerListAdapter(this,it, this)
             binding.timerList.adapter = timerListAdapter
             binding.timerList.layoutManager = LinearLayoutManager(this)
