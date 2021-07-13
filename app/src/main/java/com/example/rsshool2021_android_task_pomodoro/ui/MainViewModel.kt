@@ -1,5 +1,7 @@
 package com.example.rsshool2021_android_task_pomodoro.ui
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rsshool2021_android_task_pomodoro.model.Timer
@@ -14,7 +16,7 @@ class MainViewModel : ViewModel() {
         timerData.value = listTimers
     }
 
-    fun remove(position : Int){
+    fun remove(position: Int) {
         listTimers.removeAt(position)
         timerData.value = listTimers
     }
@@ -23,5 +25,13 @@ class MainViewModel : ViewModel() {
         return timerData
     }
 
+    fun shouldShowNotification(): Boolean {
+        for (timer in listTimers) {
+            if (timer.isRunning) {
+                return true
+            }
+        }
+        return false
+    }
 
 }

@@ -4,11 +4,11 @@ import android.os.CountDownTimer
 import android.util.Log
 
 class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
-    private var startTimeInMills: Long = (timeInMin * 60000).toLong()
+    var startTimeInMills: Long = (timeInMin * 60000).toLong()
     private var countDownTimer: CountDownTimer? = null
     var isRunning = false
     var isFinished = false
-    private var timeLeftInMills = startTimeInMills
+    var timeLeftInMills = startTimeInMills
     var updatableStringTimer = updateCountDownText()
 
     fun startTimer() {

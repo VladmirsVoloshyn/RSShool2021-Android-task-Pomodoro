@@ -14,7 +14,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rsshool2021_android_task_pomodoro.R
+import com.example.rsshool2021_android_task_pomodoro.custom.CustomProgressBar
 import com.example.rsshool2021_android_task_pomodoro.model.Timer
+import com.example.rsshool2021_android_task_pomodoro.model.dispatchers.TimerDispatcher
 
 class TimerListAdapter(
     private val listener: OnTimerClickListener,
@@ -30,12 +32,17 @@ class TimerListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        holder.customProgressBar.setPeriod(timersList[position].startTimeInMills)
+        holder.customProgressBar.setCurrent(timersList[position].timeLeftInMills)
         timersList[position].listener = this
+
         holder.textView.text = timersList[position].updatableStringTimer
         if (timersList[position].isRunning) {
             holder.startOrStopButton.text = STOP
             holder.animationDrawable.start()
             holder.imageView.visibility = ImageView.VISIBLE
+            TimerDispatcher.setTimer(timersList[position])
         }
         if (!timersList[position].isRunning) {
             holder.startOrStopButton.text = START
@@ -45,9 +52,8 @@ class TimerListAdapter(
         if (timersList[position].isFinished) {
             holder.childContainer.setBackgroundResource(R.drawable.timer_container_finished_bg)
             holder.imageView.setImageResource(R.drawable.animation_one_24)
+            holder.customProgressBar.visibility = View.INVISIBLE
         }
-        Log.d("onBind", "runned")
-
     }
 
     override fun onUpdate(time: String) {
@@ -64,6 +70,7 @@ class TimerListAdapter(
         var childContainer: ConstraintLayout = v.findViewById(R.id.childContainer)
         var imageView: ImageView = v.findViewById(R.id.animationView)
         var animationDrawable: AnimationDrawable
+        var customProgressBar : CustomProgressBar = v.findViewById(R.id.itWillCustomView)
 
         init {
             v.setOnClickListener(this)
@@ -98,11 +105,8 @@ class TimerListAdapter(
         }
 
         override fun onClick(v: View?) {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-            }
         }
     }
-
     interface OnTimerClickListener {
         fun onStartOrStopClick()
         fun onDeleteClick(position: Int)

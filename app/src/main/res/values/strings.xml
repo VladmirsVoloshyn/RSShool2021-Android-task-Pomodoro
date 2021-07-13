@@ -4,8 +4,9 @@
     <string name="set_number_in_minutes">Set number in minutes</string>
     <string name="set_time_in_minutes">Set time in minutes</string>
     <string name="dismiss">dismiss</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="timer">00:00:00</string>
     <string name="signalized_about_timer_is_running">Signalized about timer is running</string>
     <string name="add_new_timer">add_new_timer</string>
+    <string name="delete_this_timer">Delete this timer</string>
 </resources>
