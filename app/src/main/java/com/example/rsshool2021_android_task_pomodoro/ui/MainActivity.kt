@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rsshool2021_android_task_pomodoro.databinding.ActivityMainBinding
 import com.example.rsshool2021_android_task_pomodoro.service.TimerNotificationService
 
-class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener {
+class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
+    TimeSetDialogFragment.TimeSetDialogListener {
 
     private lateinit var binding: ActivityMainBinding
     private var viewModel = MainViewModel()
@@ -23,17 +24,16 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener 
         if (ViewModelRecover.nothingToRecover()) {
             viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
             ViewModelRecover.saveForeRecover(viewModel)
-        }
-        else viewModel = ViewModelRecover.recover()
+        } else viewModel = ViewModelRecover.recover()
 
         viewModel.getData().observe(this, {
-            val timerListAdapter = TimerListAdapter(this, it, this)
-            binding.timerList.adapter = timerListAdapter
+            adapter = TimerListAdapter(this, it, this)
+            binding.timerList.adapter = adapter
             binding.timerList.layoutManager = LinearLayoutManager(this)
-            adapter = timerListAdapter
         })
         binding.addFab.setOnClickListener {
-            viewModel.setData(binding.tempMitEdit.text.toString().toInt())
+            val timeSetDialogFragment = TimeSetDialogFragment()
+            timeSetDialogFragment.show(supportFragmentManager, "Set time")
         }
     }
 
@@ -61,5 +61,9 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener 
 
     companion object {
         private const val TAG = "MainActivity"
+    }
+
+    override fun onTimeSet(timeInMin: Int) {
+        viewModel.setData(timeInMin)
     }
 }

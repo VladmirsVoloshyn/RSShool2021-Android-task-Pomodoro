@@ -5,13 +5,28 @@
         android:drawable="@drawable/animation_one_24"
         android:duration="100" />
     <item
+        android:drawable="@drawable/animation_one_24"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/animation_two_24"
+        android:duration="100" />
+    <item
         android:drawable="@drawable/animation_two_24"
         android:duration="100" />
     <item
         android:drawable="@drawable/animation_three_24"
         android:duration="100" />
     <item
+        android:drawable="@drawable/animation_three_24"
+        android:duration="100" />
+    <item
         android:drawable="@drawable/animation_four_24"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/animation_four_24"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/animation_finished_24"
         android:duration="100" />
     <item
         android:drawable="@drawable/animation_finished_24"

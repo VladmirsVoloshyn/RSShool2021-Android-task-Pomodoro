@@ -1,10 +1,9 @@
 package com.example.rsshool2021_android_task_pomodoro.model
 
 import android.os.CountDownTimer
-import android.util.Log
 
-class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
-    var startTimeInMills: Long = (timeInMin * 60000).toLong()
+class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
+    var startTimeInMills: Long = (minutes * 60000).toLong()
     private var countDownTimer: CountDownTimer? = null
     var isRunning = false
     var isFinished = false
@@ -21,9 +20,8 @@ class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
             override fun onFinish() {
                 isRunning = false
                 isFinished = true
-                Log.d("FINISH", updatableStringTimer)
-                updatableStringTimer = "FINISH"
-                listener?.onUpdate("00:00:00")
+                updatableStringTimer = FINISH
+                listener?.onUpdate(TIMER_FINISHED_PATTERN)
             }
         }.start()
         isRunning = true
@@ -33,18 +31,32 @@ class Timer(timeInMin: Int = 0, var listener: OnTimeUpdate? = null) {
         val hours: Int = ((timeLeftInMills / 3600000) % 24).toInt()
         val minutes: Int = ((timeLeftInMills / 60000) % 60).toInt()
         val seconds: Int = ((timeLeftInMills / 1000) % 60).toInt()
-        val timeLeftFormatter = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        val timeLeftFormatter = String.format(TIMER_UPDATE_PATTERN, hours, minutes, seconds)
+
+
         updatableStringTimer = timeLeftFormatter
         listener?.onUpdate(updatableStringTimer)
-        Log.d("UPDATE", updatableStringTimer)
-        return timeLeftFormatter
+
+        return if (timeLeftInMills == MILLS_IN_DAY) {
+            ONE_DAY_PATTERN
+        } else {
+            timeLeftFormatter
+        }
     }
 
     fun stopTimer() {
-        if (countDownTimer!=null) {
+        if (countDownTimer != null) {
             countDownTimer?.cancel()
             isRunning = false
         }
+    }
+
+    companion object {
+        private const val MILLS_IN_DAY = 86400000L
+        private const val ONE_DAY_PATTERN = "24:00:00"
+        private const val TIMER_FINISHED_PATTERN = "00:00:00"
+        private const val FINISH = "FINISH"
+        private const val TIMER_UPDATE_PATTERN = "%02d:%02d:%02d"
     }
 
     interface OnTimeUpdate {
