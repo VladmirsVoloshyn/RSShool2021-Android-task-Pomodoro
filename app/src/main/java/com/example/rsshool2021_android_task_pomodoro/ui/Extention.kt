@@ -34,7 +34,7 @@ fun TextInputEditText.shouldShowError(textInputLayout: TextInputLayout): Boolean
     return false
 }
 
-fun Button.changeText(input : String){
+fun Button.changeSelfText(input : String){
     text = input
 }
 

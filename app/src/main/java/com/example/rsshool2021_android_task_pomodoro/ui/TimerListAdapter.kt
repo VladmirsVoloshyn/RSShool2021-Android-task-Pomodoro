@@ -37,13 +37,13 @@ class TimerListAdapter(
         holder.textView.text = timersList[position].updatableStringTimer
 
         if (timersList[position].isRunning) {
-            holder.startOrStopButton.changeText(STOP)
+            holder.startOrStopButton.changeSelfText(STOP)
             holder.animationDrawable.start()
             holder.imageView.show()
             TimerDispatcher.setTimer(timersList[position])
         }
         if (!timersList[position].isRunning) {
-            holder.startOrStopButton.changeText(START)
+            holder.startOrStopButton.changeSelfText(START)
             holder.animationDrawable.stop()
             holder.imageView.hide()
         }
@@ -51,6 +51,8 @@ class TimerListAdapter(
             holder.childContainer.setBackgroundResource(R.drawable.timer_container_finished_bg)
             holder.imageView.setImageResource(R.drawable.animation_one_24)
             holder.customProgressBar.hide()
+            holder.startOrStopButton.changeSelfText("")
+            holder.startOrStopButton.isEnabled = false
         }
     }
 
@@ -79,11 +81,11 @@ class TimerListAdapter(
                     timersList[adapterPosition].stopTimer()
                     animationDrawable.stop()
                     imageView.hide()
-                    startOrStopButton.changeText(START)
+                    startOrStopButton.changeSelfText(START)
                 } else {
                     if (!timersList[adapterPosition].isRunning) {
                         timersList[adapterPosition].startTimer()
-                        startOrStopButton.changeText(STOP)
+                        startOrStopButton.changeSelfText(STOP)
                         imageView.show()
                         animationDrawable.start()
                         for (item in timersList) {
@@ -114,6 +116,7 @@ class TimerListAdapter(
     companion object {
         private const val START = "START"
         private const val STOP = "STOP"
+        private const val RESTART = "RESTART"
     }
 
 

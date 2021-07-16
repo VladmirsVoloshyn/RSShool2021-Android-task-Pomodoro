@@ -4,12 +4,13 @@ package com.example.rsshool2021_android_task_pomodoro.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rsshool2021_android_task_pomodoro.model.Timer
+import org.w3c.dom.Text
 
-class MainViewModel : ViewModel() {
+class MainViewModel(some : String) : ViewModel() {
 
     private var timerData: MutableLiveData<ArrayList<Timer>> = MutableLiveData()
     private val listTimers = ArrayList<Timer>()
-
+    
     fun setData(time: Int) {
         listTimers.add(Timer(time))
         timerData.value = listTimers
