@@ -52,23 +52,19 @@ class CustomProgressBar @JvmOverloads constructor(
         val starAngel = (((currentMs % periodMs).toFloat() / periodMs) * 360)
 
         canvas?.drawArc(0f, 0f, width.toFloat(), height.toFloat(), -90f, starAngel, true, paint)
-
-
-    }
-    fun hide(){
-        this.visibility = View.INVISIBLE
     }
 
-    fun show(){
-        this.visibility = View.VISIBLE
+    fun hide() {
+        this.visibility = INVISIBLE
+    }
+    fun show() {
+        this.visibility = VISIBLE
     }
 
-    fun setCurrent(current: Long) {
+    fun setProgress(current: Long, period: Long) {
         currentMs = current
+        periodMs = period
         invalidate()
     }
 
-    fun setPeriod(period: Long) {
-        periodMs = period
-    }
 }

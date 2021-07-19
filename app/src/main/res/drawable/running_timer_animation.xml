@@ -5,7 +5,7 @@
         android:drawable="@drawable/animation_one_24"
         android:duration="100" />
     <item
-        android:drawable="@drawable/animation_one_24"
+        android:drawable="@drawable/animation_btw_one_two24"
         android:duration="100" />
     <item
         android:drawable="@drawable/animation_two_24"
@@ -17,13 +17,10 @@
         android:drawable="@drawable/animation_three_24"
         android:duration="100" />
     <item
-        android:drawable="@drawable/animation_three_24"
+        android:drawable="@drawable/animation_btw_three_four24"
         android:duration="100" />
     <item
-        android:drawable="@drawable/animation_four_24"
-        android:duration="100" />
-    <item
-        android:drawable="@drawable/animation_four_24"
+        android:drawable="@drawable/animation_btw_four_finish_24"
         android:duration="100" />
     <item
         android:drawable="@drawable/animation_finished_24"

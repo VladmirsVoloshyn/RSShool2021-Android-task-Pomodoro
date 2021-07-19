@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.rsshool2021_android_task_pomodoro">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".PomodoroApp"
         android:allowBackup="true"
@@ -12,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RSShool2021AndroidtaskPomodoro"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -29,11 +29,14 @@ class TimeSetDialogFragment : DialogFragment() {
 
         binding.okButton.setOnClickListener {
 
-            if (binding.minEditText.shouldShowError(binding.textInputLayout)){
-                return@setOnClickListener
+            when {
+                binding.minEditText.shouldShowError(binding.textInputLayout) -> {
+                }
+                else -> {
+                    listener?.onTimeSet(binding.minEditText.text.toString().toInt())
+                    dialog?.dismiss()
+                }
             }
-            listener?.onTimeSet(binding.minEditText.text.toString().toInt())
-            dialog?.dismiss()
         }
 
         binding.dismissButton.setOnClickListener {

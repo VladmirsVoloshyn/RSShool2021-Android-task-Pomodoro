@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
         } else viewModel = ViewModelRecover.recover()
 
         viewModel.getData().observe(this, {
-            adapter = TimerListAdapter(this, it, this)
+            adapter = TimerListAdapter(this, it)
             binding.timerList.adapter = adapter
             binding.timerList.layoutManager = LinearLayoutManager(this)
         })
@@ -52,18 +52,12 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
         super.onPause()
     }
 
-    override fun onStartOrStopClick() {
-    }
-
     override fun onDeleteClick(position: Int) {
         viewModel.remove(position)
     }
 
-    companion object {
-        private const val TAG = "MainActivity"
-    }
-
     override fun onTimeSet(timeInMin: Int) {
         viewModel.setData(timeInMin)
+        adapter?.notifyDataSetChanged()
     }
 }

@@ -39,6 +39,7 @@ class TimerNotificationService : Service(), Timer.OnTimeUpdate {
         val pendingIntent = PendingIntent.getActivity(this, 0, intentActivity, 0)
         notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Timer is running")
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentText(input)
             .setContentIntent(pendingIntent)

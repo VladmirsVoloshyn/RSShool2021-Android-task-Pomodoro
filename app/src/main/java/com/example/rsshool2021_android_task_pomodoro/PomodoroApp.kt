@@ -23,7 +23,7 @@ class PomodoroApp : Application() {
             val notificationChannel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_LOW
             )
 
             val notificationManager = getSystemService(NotificationManager::class.java)

@@ -38,6 +38,14 @@ fun Button.changeSelfText(input : String){
     text = input
 }
 
+fun Button.unable(){
+    this.isEnabled = false
+}
+
+fun Button.enable(){
+    this.isEnabled = true
+}
+
 fun ImageView.hide(){
     this.visibility = ImageView.INVISIBLE
 }

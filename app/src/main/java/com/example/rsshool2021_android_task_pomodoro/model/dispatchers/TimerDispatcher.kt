@@ -8,7 +8,6 @@ object TimerDispatcher {
 
     fun setTimer(_timer: Timer) {
         timer = _timer
-        Log.d("TimerDispatcher", timer.updatableStringTimer)
     }
 
     fun getTimer(): Timer {
