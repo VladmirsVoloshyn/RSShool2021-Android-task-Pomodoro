@@ -21,7 +21,7 @@ class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
                 isRunning = false
                 isFinished = true
                 updatableStringTimer = FINISH
-                listener?.onUpdate(TIMER_FINISHED_PATTERN)
+                listener?.onUpdate()
             }
         }.start()
         isRunning = true
@@ -35,7 +35,7 @@ class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
 
 
         updatableStringTimer = timeLeftFormatter
-        listener?.onUpdate(updatableStringTimer)
+        listener?.onUpdate()
 
         return if (timeLeftInMills == MILLS_IN_DAY) {
             ONE_DAY_PATTERN
@@ -54,12 +54,11 @@ class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
     companion object {
         private const val MILLS_IN_DAY = 86400000L
         private const val ONE_DAY_PATTERN = "24:00:00"
-        private const val TIMER_FINISHED_PATTERN = "00:00:00"
         private const val FINISH = "FINISH"
         private const val TIMER_UPDATE_PATTERN = "%02d:%02d:%02d"
     }
 
     interface OnTimeUpdate {
-        fun onUpdate(time: String)
+        fun onUpdate()
     }
 }

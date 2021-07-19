@@ -18,7 +18,8 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintVertical_bias="0.501"
         tools:itemCount="5"
-        tools:listitem="@layout/timer_container" />
+        tools:listitem="@layout/timer_container"
+        android:layoutAnimation="@anim/layout_animation"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

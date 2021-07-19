@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.rsshool2021_android_task_pomodoro.databinding.ActivityMainBinding
 import com.example.rsshool2021_android_task_pomodoro.service.TimerNotificationService
 
@@ -35,6 +37,16 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
             val timeSetDialogFragment = TimeSetDialogFragment()
             timeSetDialogFragment.show(supportFragmentManager, "Set time")
         }
+        val swipeToDeleteCallBack = object : SwipeToDeleteCallBack() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                super.onSwiped(viewHolder, direction)
+                val position = viewHolder.adapterPosition
+                viewModel.remove(position)
+                binding.timerList.adapter?.notifyItemRemoved(position)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallBack)
+        itemTouchHelper.attachToRecyclerView(binding.timerList)
     }
 
     override fun onResume() {

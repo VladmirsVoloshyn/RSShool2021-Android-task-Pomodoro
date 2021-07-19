@@ -43,7 +43,7 @@ class TimerListAdapter(
             holder.vBinding.startOrStopButton.changeSelfText(STOP)
             holder.animationDrawable.start()
             holder.vBinding.animationView.show()
-            TimerDispatcher.setTimer(timersList[position])
+            TimerDispatcher.setTimer(timersList[position], position)
         }
         if (!timersList[position].isRunning) {
             holder.vBinding.startOrStopButton.changeSelfText(START)
@@ -52,8 +52,8 @@ class TimerListAdapter(
         }
     }
 
-    override fun onUpdate(time: String) {
-        notifyDataSetChanged()
+    override fun onUpdate() {
+        notifyItemChanged(TimerDispatcher.currentIndexInList)
     }
 
     override fun getItemCount() = timersList.size

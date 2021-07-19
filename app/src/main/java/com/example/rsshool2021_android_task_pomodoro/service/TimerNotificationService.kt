@@ -26,7 +26,7 @@ class TimerNotificationService : Service(), Timer.OnTimeUpdate {
         return START_NOT_STICKY
     }
 
-    override fun onUpdate(time: String) {
+    override fun onUpdate() {
         startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
     }
 
