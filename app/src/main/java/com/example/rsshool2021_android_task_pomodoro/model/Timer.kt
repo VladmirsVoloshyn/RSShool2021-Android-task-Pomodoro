@@ -2,7 +2,11 @@ package com.example.rsshool2021_android_task_pomodoro.model
 
 import android.os.CountDownTimer
 
-class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
+class Timer(
+    minutes: Int = 0,
+    var listener: OnTimeUpdate? = null,
+    var notificationListener: OnUpdateNotification? = null
+) {
     var startTimeInMills: Long = (minutes * 60000).toLong()
     private var countDownTimer: CountDownTimer? = null
     var isRunning = false
@@ -11,7 +15,7 @@ class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
     var updatableStringTimer = updateCountDownText()
 
     fun startTimer() {
-        countDownTimer = object : CountDownTimer(timeLeftInMills, 1000) {
+        countDownTimer = object : CountDownTimer(timeLeftInMills, 100) {
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMills = millisUntilFinished
                 updateCountDownText()
@@ -33,9 +37,8 @@ class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
         val seconds: Int = ((timeLeftInMills / 1000) % 60).toInt()
         val timeLeftFormatter = String.format(TIMER_UPDATE_PATTERN, hours, minutes, seconds)
 
-
         updatableStringTimer = timeLeftFormatter
-        listener?.onUpdate()
+        notificationListener?.onUpdateNotification()
 
         return if (timeLeftInMills == MILLS_IN_DAY) {
             ONE_DAY_PATTERN
@@ -60,5 +63,9 @@ class Timer(minutes: Int = 0, var listener: OnTimeUpdate? = null) {
 
     interface OnTimeUpdate {
         fun onUpdate()
+    }
+
+    interface OnUpdateNotification {
+        fun onUpdateNotification()
     }
 }

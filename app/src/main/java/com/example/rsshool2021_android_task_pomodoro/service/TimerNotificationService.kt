@@ -12,13 +12,14 @@ import com.example.rsshool2021_android_task_pomodoro.model.Timer
 import com.example.rsshool2021_android_task_pomodoro.model.dispatchers.TimerDispatcher
 import com.example.rsshool2021_android_task_pomodoro.ui.MainActivity
 
-class TimerNotificationService : Service(), Timer.OnTimeUpdate {
+class TimerNotificationService : Service(), Timer.OnTimeUpdate, Timer.OnUpdateNotification {
 
     private var notification: Notification? = null
 
     override fun onCreate() {
         super.onCreate()
         TimerDispatcher.getTimer().listener = this
+        TimerDispatcher.getTimer().notificationListener = this
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -26,13 +27,15 @@ class TimerNotificationService : Service(), Timer.OnTimeUpdate {
         return START_NOT_STICKY
     }
 
-    override fun onUpdate() {
+    override fun onUpdateNotification() {
         startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
+
+
 
     private fun createNotification(input: String): Notification {
         val intentActivity = Intent(this, MainActivity::class.java)
@@ -45,6 +48,10 @@ class TimerNotificationService : Service(), Timer.OnTimeUpdate {
             .setContentIntent(pendingIntent)
             .build()
         return notification as Notification
+    }
+
+    override fun onUpdate() {
+        startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
     }
 
 }

@@ -39,6 +39,8 @@ android {
 
 dependencies {
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
+
     //ViewModel & LiveData
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'

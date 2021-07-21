@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 super.onSwiped(viewHolder, direction)
                 val position = viewHolder.adapterPosition
-                viewModel.remove(position)
-                binding.timerList.adapter?.notifyItemRemoved(position)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallBack)
@@ -51,10 +49,12 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
 
     override fun onResume() {
         super.onResume()
-        adapter?.notifyDataSetChanged()
+        binding.timerList.adapter?.notifyDataSetChanged()
         val intent = Intent(this, TimerNotificationService::class.java)
         stopService(intent)
     }
+
+
 
     override fun onPause() {
         if (viewModel.shouldShowNotification()) {
@@ -70,6 +70,5 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
 
     override fun onTimeSet(timeInMin: Int) {
         viewModel.setData(timeInMin)
-        adapter?.notifyDataSetChanged()
     }
 }

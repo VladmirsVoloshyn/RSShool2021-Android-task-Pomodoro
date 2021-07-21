@@ -57,8 +57,18 @@ class CustomProgressBar @JvmOverloads constructor(
     fun hide() {
         this.visibility = INVISIBLE
     }
+
     fun show() {
         this.visibility = VISIBLE
+    }
+
+    fun setPeriod(period: Long) {
+        periodMs = period
+    }
+
+    fun setCurrent(current: Long) {
+        currentMs = current
+        invalidate()
     }
 
     fun setProgress(current: Long, period: Long) {
