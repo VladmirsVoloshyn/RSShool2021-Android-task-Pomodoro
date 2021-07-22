@@ -11,10 +11,12 @@ import com.example.rsshool2021_android_task_pomodoro.R
 import com.example.rsshool2021_android_task_pomodoro.model.Timer
 import com.example.rsshool2021_android_task_pomodoro.model.dispatchers.TimerDispatcher
 import com.example.rsshool2021_android_task_pomodoro.ui.MainActivity
+import kotlinx.coroutines.*
 
 class TimerNotificationService : Service(), Timer.OnTimeUpdate, Timer.OnUpdateNotification {
 
     private var notification: Notification? = null
+    private var timerThread = CoroutineScope(CoroutineName("foreground job"))
 
     override fun onCreate() {
         super.onCreate()
@@ -23,19 +25,25 @@ class TimerNotificationService : Service(), Timer.OnTimeUpdate, Timer.OnUpdateNo
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
+        timerThread.launch {
+            while (TimerDispatcher.getTimer().isRunning) {
+                startForeground(
+                    1,
+                    createNotification(TimerDispatcher.getTimer().updatableStringTimer)
+                )
+                delay(1000L)
+            }
+        }
         return START_NOT_STICKY
     }
 
     override fun onUpdateNotification() {
-        startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
+//        startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
-
-
 
     private fun createNotification(input: String): Notification {
         val intentActivity = Intent(this, MainActivity::class.java)
@@ -52,6 +60,11 @@ class TimerNotificationService : Service(), Timer.OnTimeUpdate, Timer.OnUpdateNo
 
     override fun onUpdate() {
         startForeground(1, createNotification(TimerDispatcher.getTimer().updatableStringTimer))
+    }
+
+    override fun onDestroy() {
+        timerThread.cancel()
+        super.onDestroy()
     }
 
 }

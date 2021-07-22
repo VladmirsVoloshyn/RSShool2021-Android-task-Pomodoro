@@ -9,15 +9,14 @@ import com.example.rsshool2021_android_task_pomodoro.R
 import com.example.rsshool2021_android_task_pomodoro.databinding.TimerContainerBinding
 import com.example.rsshool2021_android_task_pomodoro.model.Timer
 import com.example.rsshool2021_android_task_pomodoro.model.dispatchers.TimerDispatcher
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.concurrent.fixedRateTimer
 
 class TimerListAdapter(
     private val listener: OnTimerClickListener,
     private val timersList: ArrayList<Timer>,
 ) : RecyclerView.Adapter<TimerListAdapter.ViewHolder>(), Timer.OnTimeUpdate {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -30,28 +29,28 @@ class TimerListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val timerThread = CoroutineScope(CoroutineName("Timer"))
+
         holder.vBinding.customProgressBar.show()
         holder.vBinding.customProgressBar.setPeriod(timersList[position].startTimeInMills)
         holder.vBinding.customProgressBar.setCurrent(timersList[position].timeLeftInMills)
         holder.vBinding.timerTextView.text = timersList[position].updatableStringTimer
         holder.vBinding.childContainer.setBackgroundResource(R.drawable.timer_container_bg)
         holder.vBinding.startOrStopButton.enable()
+
         timersList[position].listener = this
 
         if (timersList[position].isRunning) {
-            timerThread.launch {
-                try {
-                    while (timersList[position].isRunning) {
-                        holder.vBinding.timerTextView.text =
-                            timersList[position].updatableStringTimer
-                        holder.vBinding.customProgressBar.setCurrent(timersList[position].timeLeftInMills)
-                        holder.animationDrawable.start()
-                    }
-                    delay(1L)
-                } catch (e: IndexOutOfBoundsException) {
+            holder.animationDrawable.start()
 
+            CoroutineScope(CoroutineName(SIMPLE_THREAD_NAME + position)).launch {
+                while (timersList[position].isRunning) {
+                    holder.vBinding.timerTextView.text =
+                        timersList[position].updatableStringTimer
+                    holder.vBinding.customProgressBar.setCurrent(
+                        timersList[position].timeLeftInMills
+                    )
                 }
+                delay(100L)
             }
             holder.vBinding.startOrStopButton.changeSelfText(STOP)
             holder.vBinding.animationView.show()
@@ -63,7 +62,6 @@ class TimerListAdapter(
             holder.animationDrawable.stop()
             holder.vBinding.startOrStopButton.unable()
         }
-
         if (!timersList[position].isRunning) {
             holder.vBinding.startOrStopButton.changeSelfText(START)
             holder.animationDrawable.stop()
@@ -71,11 +69,22 @@ class TimerListAdapter(
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+
+    }
+
     override fun onUpdate() {
         notifyDataSetChanged()
     }
 
     override fun getItemCount() = timersList.size
+
+
     inner class ViewHolder(val vBinding: TimerContainerBinding) :
         RecyclerView.ViewHolder(vBinding.root) {
         var animationDrawable: AnimationDrawable
@@ -114,5 +123,6 @@ class TimerListAdapter(
     companion object {
         private const val START = "START"
         private const val STOP = "STOP"
+        private const val SIMPLE_THREAD_NAME = "Thread"
     }
 }

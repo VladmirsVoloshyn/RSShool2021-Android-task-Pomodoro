@@ -7,15 +7,19 @@ class Timer(
     var listener: OnTimeUpdate? = null,
     var notificationListener: OnUpdateNotification? = null
 ) {
+
+
     var startTimeInMills: Long = (minutes * 60000).toLong()
     private var countDownTimer: CountDownTimer? = null
     var isRunning = false
     var isFinished = false
     var timeLeftInMills = startTimeInMills
     var updatableStringTimer = updateCountDownText()
+    var countDownInterval = 1L
+
 
     fun startTimer() {
-        countDownTimer = object : CountDownTimer(timeLeftInMills, 100) {
+        countDownTimer = object : CountDownTimer(timeLeftInMills, countDownInterval) {
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMills = millisUntilFinished
                 updateCountDownText()

@@ -13,7 +13,7 @@ class MainViewModel : ViewModel() {
 
     fun setData(time: Int) {
         listTimers.add(Timer(time))
-        timerData.value = listTimers
+        timerData.postValue(listTimers)
         getStatus()
     }
 
@@ -34,7 +34,7 @@ class MainViewModel : ViewModel() {
         }
         return false
     }
-    fun getStatus (){
+    private fun getStatus (){
         for (time in listTimers){
             Log.d(listTimers.indexOf(time).toString(), time.isFinished.toString())
         }

@@ -7,6 +7,7 @@ object TimerDispatcher {
 
     fun setTimer(_timer: Timer) {
         timer = _timer
+
     }
 
     fun getTimer(): Timer {
