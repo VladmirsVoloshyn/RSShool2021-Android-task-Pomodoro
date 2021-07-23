@@ -2,21 +2,18 @@ package com.example.rsshool2021_android_task_pomodoro.model
 
 import android.os.CountDownTimer
 
+class NotificationTimer(var noteListener: OnUpdateNotification? = null, startTime : Long, leftTime : Long) : Timer() {
 
-open class Timer(
-    minutes: Int = 0,
-    var listener : OnTimerFinish? = null
-) {
-    var startTimeInMills: Long = (minutes * 60000).toLong()
     private var countDownTimer: CountDownTimer? = null
-    var isRunning = false
-    var isFinished = false
-    var timeLeftInMills = startTimeInMills
-    var updatableStringTimer = this.updateCountDownText()
-    open var countDownInterval = 1L
+    override var countDownInterval = 1000L
+
+    init {
+        startTimeInMills = startTime
+        timeLeftInMills = leftTime
+    }
 
 
-   open fun startTimer() {
+    override fun startTimer() {
         countDownTimer = object : CountDownTimer(timeLeftInMills, countDownInterval) {
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMills = millisUntilFinished
@@ -27,18 +24,20 @@ open class Timer(
                 isRunning = false
                 isFinished = true
                 updatableStringTimer = FINISH
-                listener?.onTimerFinish()
             }
         }.start()
         isRunning = true
     }
 
-   open fun updateCountDownText(): String {
+    override fun updateCountDownText(): String {
         val hours: Int = ((timeLeftInMills / 3600000) % 24).toInt()
         val minutes: Int = ((timeLeftInMills / 60000) % 60).toInt()
         val seconds: Int = ((timeLeftInMills / 1000) % 60).toInt()
         val timeLeftFormatter = String.format(TIMER_UPDATE_PATTERN, hours, minutes, seconds)
+
         updatableStringTimer = timeLeftFormatter
+        noteListener?.onUpdateNotification()
+
         return if (timeLeftInMills == MILLS_IN_DAY) {
             ONE_DAY_PATTERN
         } else {
@@ -46,7 +45,7 @@ open class Timer(
         }
     }
 
-   open fun stopTimer() {
+    override fun stopTimer() {
         if (countDownTimer != null) {
             countDownTimer?.cancel()
             isRunning = false
@@ -60,8 +59,7 @@ open class Timer(
         private const val TIMER_UPDATE_PATTERN = "%02d:%02d:%02d"
     }
 
-
-    interface OnTimerFinish {
-        fun onTimerFinish()
+    interface OnUpdateNotification {
+        fun onUpdateNotification()
     }
 }

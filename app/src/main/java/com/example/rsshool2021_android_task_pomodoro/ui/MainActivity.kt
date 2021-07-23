@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
 
         intentService = Intent(applicationContext, TimerNotificationService::class.java)
         stopService(intentService)
+
         if (ViewModelRecover.nothingToRecover()) {
             viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
             ViewModelRecover.saveForeRecover(viewModel)
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
 
     override fun onPause() {
         if (viewModel.shouldShowNotification()) {
-            ContextCompat.startForegroundService(applicationContext, intentService)
+            ContextCompat.startForegroundService(this, intentService)
         }
         super.onPause()
     }

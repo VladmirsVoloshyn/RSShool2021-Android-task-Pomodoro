@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rsshool2021_android_task_pomodoro.model.Timer
+import com.example.rsshool2021_android_task_pomodoro.model.dispatchers.TimerDispatcher
 
 class MainViewModel : ViewModel() {
 
@@ -29,6 +30,7 @@ class MainViewModel : ViewModel() {
     fun shouldShowNotification(): Boolean {
         for (timer in listTimers) {
             if (timer.isRunning) {
+                TimerDispatcher.setTimer(timer)
                 return true
             }
         }
