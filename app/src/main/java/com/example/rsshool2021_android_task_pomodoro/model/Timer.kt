@@ -8,9 +8,10 @@ open class Timer(
     var listener : OnTimerFinish? = null
 ) {
     var startTimeInMills: Long = (minutes * 60000).toLong()
-    private var countDownTimer: CountDownTimer? = null
+    open var countDownTimer: CountDownTimer? = null
     var isRunning = false
     var isFinished = false
+    var isStopped = false
     var timeLeftInMills = startTimeInMills
     var updatableStringTimer = this.updateCountDownText()
     open var countDownInterval = 1L
@@ -50,6 +51,7 @@ open class Timer(
         if (countDownTimer != null) {
             countDownTimer?.cancel()
             isRunning = false
+            isStopped = true
         }
     }
 

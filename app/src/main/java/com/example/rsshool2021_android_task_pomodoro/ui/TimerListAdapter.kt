@@ -16,9 +16,9 @@ import kotlin.concurrent.fixedRateTimer
 class TimerListAdapter(
     private val listener: OnTimerClickListener,
     private val timersList: ArrayList<Timer>,
-) : RecyclerView.Adapter<TimerListAdapter.ViewHolder>(), Timer.OnTimerFinish{
+) : RecyclerView.Adapter<TimerListAdapter.ViewHolder>(), Timer.OnTimerFinish {
 
-   private lateinit var  thread : CoroutineScope
+    private var thread: CoroutineScope? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -29,10 +29,8 @@ class TimerListAdapter(
             )
         )
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        thread = CoroutineScope(CoroutineName(SIMPLE_THREAD_NAME + position))
-
         holder.vBinding.customProgressBar.show()
         holder.vBinding.customProgressBar.setPeriod(timersList[position].startTimeInMills)
         holder.vBinding.customProgressBar.setCurrent(timersList[position].timeLeftInMills)
@@ -41,20 +39,25 @@ class TimerListAdapter(
         holder.vBinding.startOrStopButton.enable()
         timersList[position].listener = this
         if (timersList[position].isRunning) {
+            holder.vBinding.animationView.setBackgroundResource(R.drawable.running_timer_animation)
+            holder.animationDrawable = holder.vBinding.animationView.background as AnimationDrawable
             holder.animationDrawable.start()
-           thread.launch {
-               try {
-                while (timersList[position].isRunning) {
-                    holder.vBinding.timerTextView.text =
-                        timersList[position].updatableStringTimer
-                    holder.vBinding.customProgressBar.setCurrent(
-                        timersList[position].timeLeftInMills
-                    )
+            if (thread == null) {
+                thread = CoroutineScope(CoroutineName(SIMPLE_THREAD_NAME + position))
+                thread?.launch {
+                    try {
+                        while (timersList[position].isRunning) {
+                            holder.vBinding.timerTextView.text =
+                                timersList[position].updatableStringTimer
+                            holder.vBinding.customProgressBar.setCurrent(
+                                timersList[position].timeLeftInMills
+                            )
+                        }
+                        delay(100L)
+                    } catch (e: IndexOutOfBoundsException) {
+                        cancel()
+                    }
                 }
-                delay(100L)
-               }catch (e : IndexOutOfBoundsException){
-                   cancel()
-               }
             }
             holder.vBinding.startOrStopButton.changeSelfText(STOP)
             holder.vBinding.animationView.show()
@@ -64,16 +67,22 @@ class TimerListAdapter(
             holder.vBinding.customProgressBar.hide()
             holder.animationDrawable.stop()
             holder.vBinding.startOrStopButton.unable()
+            timersList[position].isStopped = false
         }
         if (!timersList[position].isRunning) {
             holder.vBinding.startOrStopButton.changeSelfText(START)
             holder.animationDrawable.stop()
             holder.vBinding.animationView.hide()
+            if (timersList[position].isStopped)
+                holder.vBinding.animationView.show()
+                holder.vBinding.animationView.setBackgroundResource(R.drawable.ic_baseline_pause_24)
         }
     }
+
     override fun getItemViewType(position: Int): Int {
         return position
     }
+
     override fun getItemId(position: Int): Long {
         return position.toLong()
 
@@ -92,17 +101,20 @@ class TimerListAdapter(
         init {
             vBinding.animationView.setBackgroundResource(R.drawable.running_timer_animation)
             animationDrawable = vBinding.animationView.background as AnimationDrawable
+
             vBinding.startOrStopButton.setOnClickListener {
                 when (timersList[adapterPosition].isRunning) {
                     true -> {
                         timersList[adapterPosition].stopTimer()
-                        thread.cancel()
+                        thread?.cancel()
+                        thread = null
                     }
                     false -> {
                         timersList[adapterPosition].startTimer()
                         for (item in timersList) {
                             if (item != timersList[adapterPosition]) {
                                 item.stopTimer()
+                                thread = null
                             }
                         }
                     }

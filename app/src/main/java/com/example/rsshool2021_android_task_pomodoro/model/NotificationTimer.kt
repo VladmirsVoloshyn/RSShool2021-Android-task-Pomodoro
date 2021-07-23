@@ -4,7 +4,7 @@ import android.os.CountDownTimer
 
 class NotificationTimer(var noteListener: OnUpdateNotification? = null, startTime : Long, leftTime : Long) : Timer() {
 
-    private var countDownTimer: CountDownTimer? = null
+    override var countDownTimer: CountDownTimer? = null
     override var countDownInterval = 1000L
 
     init {
@@ -24,6 +24,7 @@ class NotificationTimer(var noteListener: OnUpdateNotification? = null, startTim
                 isRunning = false
                 isFinished = true
                 updatableStringTimer = FINISH
+                noteListener?.onUpdateNotification()
             }
         }.start()
         isRunning = true
