@@ -39,10 +39,6 @@ class TimerNotificationService : Service(), NotificationTimer.OnUpdateNotificati
     }
 
     private fun createNotification(input: String): Notification {
-        val bitmap = BitmapFactory.decodeResource(
-            resources,
-            R.drawable.clock_notification
-        )
         val intentActivity = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intentActivity, 0
@@ -50,7 +46,12 @@ class TimerNotificationService : Service(), NotificationTimer.OnUpdateNotificati
         notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("TIMER IS RUNNING")
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setLargeIcon(bitmap)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    resources,
+                    R.drawable.clock_notification
+                )
+            )
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentText(input)
             .setContentIntent(pendingIntent)

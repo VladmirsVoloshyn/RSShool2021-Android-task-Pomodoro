@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), TimerListAdapter.OnTimerClickListener,
 
     override fun onPause() {
         if (viewModel.shouldShowNotification()) {
-            ContextCompat.startForegroundService(this, intentService)
+            ContextCompat.startForegroundService(applicationContext, intentService)
         }
         super.onPause()
     }
